@@ -27,3 +27,6 @@ advent2023-*.tar
 
 # Inputs for puzzles
 /inputs/
+
+# OS specific
+.DS_Store
