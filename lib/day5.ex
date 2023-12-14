@@ -1,7 +1,5 @@
 defmodule Day5 do
   def part1(input) do
-    IO.puts("Day 5 - Part 1")
-
     [seeds | maps] =
       input
       |> String.split("\n\n", trim: true)

@@ -1,14 +1,12 @@
 defmodule Day2 do
-  def part1 do
-    IO.puts("Day 2 - Part 1")
-
+  def part1(input) do
     max_cubes = %{
       "red" => 12,
       "green" => 13,
       "blue" => 14
     }
 
-    File.read!("inputs/day2.txt")
+    input
     |> String.split("\n", trim: true)
     |> Enum.map(&String.split(&1, ": "))
     |> Enum.filter(fn [_game, cubes] ->
@@ -27,10 +25,8 @@ defmodule Day2 do
     |> IO.puts()
   end
 
-  def part2 do
-    IO.puts("Day 2 - Part 2")
-
-    File.read!("inputs/day2.txt")
+  def part2(input) do
+    input
     |> String.split("\n", trim: true)
     |> Enum.map(&String.split(&1, ": "))
     |> Enum.map(fn [_, cubes] ->
@@ -49,11 +45,4 @@ defmodule Day2 do
     |> Enum.sum()
     |> IO.puts()
   end
-
-  def run do
-    part1()
-    part2()
-  end
 end
-
-Day2.run()

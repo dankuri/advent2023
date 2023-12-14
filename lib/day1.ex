@@ -1,8 +1,6 @@
 defmodule Day1 do
-  def part1() do
-    IO.puts("Day 1 - Part 1")
-
-    File.read!("inputs/day1.txt")
+  def part1(input) do
+    input
     |> String.split("\n", trim: true)
     |> Enum.map(&String.split(&1, "", trim: true))
     |> Enum.map(&Enum.filter(&1, fn char -> Integer.parse(char) != :error end))
@@ -12,9 +10,7 @@ defmodule Day1 do
     |> IO.puts()
   end
 
-  def part2() do
-    IO.puts("Day 1 - Part 2")
-
+  def part2(input) do
     wordToNumberMap = %{
       "one" => "1ne",
       "two" => "2wo",
@@ -27,7 +23,7 @@ defmodule Day1 do
       "nine" => "9ine"
     }
 
-    File.read!("inputs/day1.txt")
+    input
     |> String.split("\n", trim: true)
     |> Enum.map(
       &String.replace(&1, Map.keys(wordToNumberMap), fn matched ->
@@ -47,11 +43,4 @@ defmodule Day1 do
     |> Enum.sum()
     |> IO.puts()
   end
-
-  def run() do
-    part1()
-    part2()
-  end
 end
-
-Day1.run()

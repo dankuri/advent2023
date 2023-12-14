@@ -1,8 +1,6 @@
 defmodule Day4 do
-  def part1 do
-    IO.puts("Day 4 - Part 1")
-
-    File.read!("inputs/day4.txt")
+  def part1(input) do
+    input
     |> String.split("\n", trim: true)
     |> Enum.map(&String.split(&1, ": ", trim: true))
     |> Enum.map(&List.last/1)
@@ -20,11 +18,9 @@ defmodule Day4 do
     |> IO.puts()
   end
 
-  def part2 do
-    IO.puts("Day 4 - Part 2")
-
-    # bruh this completes in 50 sec on my 2016 macbook pro...
-    File.read!("inputs/day4.txt")
+  # bruh this completes in 50 sec on my 2016 macbook pro...
+  def part2(input) do
+    input
     |> String.split("\n", trim: true)
     |> Enum.map(&String.split(&1, ": "))
     |> Enum.reduce({[], %{}}, fn [card_id, card_nums], {cards, matches_map} ->
@@ -56,11 +52,4 @@ defmodule Day4 do
       populate_copies({matching_keys, matches_map}) ++
       populate_copies({cards, matches_map})
   end
-
-  def run do
-    part1()
-    part2()
-  end
 end
-
-Day4.run()
