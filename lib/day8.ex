@@ -1,5 +1,44 @@
 defmodule Day8 do
   def part1(input) do
+    {dirs, map} = parse_input(input)
+
+    find_zzz(dirs, map, "AAA", 0)
+  end
+
+  def find_zzz(dirs, map, cur_point, step_count) do
+    next_dir = Enum.at(dirs, rem(step_count, Enum.count(dirs)))
+    next_point = map[cur_point][next_dir]
+
+    if next_point === "ZZZ" do
+      step_count + 1
+    else
+      find_zzz(dirs, map, next_point, step_count + 1)
+    end
+  end
+
+  def part2(input) do
+    {dirs, map} = parse_input(input)
+
+    map
+    |> Map.keys()
+    |> Enum.filter(&String.ends_with?(&1, "A"))
+    |> Enum.map(&find_last_z(dirs, map, &1, 0))
+    # lcm trick I just learned - thnx to Elixir Forum
+    |> Enum.reduce(fn x, y -> div(x * y, Integer.gcd(x, y)) end)
+  end
+
+  def find_last_z(dirs, map, cur_point, step_count) do
+    next_dir = Enum.at(dirs, rem(step_count, Enum.count(dirs)))
+    next_point = map[cur_point][next_dir]
+
+    if String.ends_with?(next_point, "Z") do
+      step_count + 1
+    else
+      find_last_z(dirs, map, next_point, step_count + 1)
+    end
+  end
+
+  def parse_input(input) do
     [dirs | points] =
       input
       |> String.split("\n", trim: true)
@@ -22,18 +61,5 @@ defmodule Day8 do
       end)
 
     {dirs, map}
-
-    find_zzz(dirs, map, "AAA", 0)
-  end
-
-  def find_zzz(dirs, map, cur_point, step_count) do
-    next_dir = Enum.at(dirs, rem(step_count, Enum.count(dirs)))
-    next_point = map[cur_point][next_dir]
-
-    if next_point === "ZZZ" do
-      step_count + 1
-    else
-      find_zzz(dirs, map, next_point, step_count + 1)
-    end
   end
 end
