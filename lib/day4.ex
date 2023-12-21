@@ -18,38 +18,37 @@ defmodule Day4 do
     |> IO.puts()
   end
 
-  # bruh this completes in 50 sec on my 2016 macbook pro...
   def part2(input) do
     input
     |> String.split("\n", trim: true)
     |> Enum.map(&String.split(&1, ": "))
-    |> Enum.reduce({[], %{}}, fn [card_id, card_nums], {cards, matches_map} ->
+    |> Enum.reduce(%{}, fn [card_id, card_nums], matches_map ->
       card_id = String.split(card_id, " ") |> List.last() |> String.to_integer()
 
       [winning_nums, have_nums] =
         String.split(card_nums, " | ") |> Enum.map(&String.split(&1, " ", trim: true))
 
       matches = Enum.count(have_nums, &Enum.member?(winning_nums, &1))
-      {cards ++ [card_id], Map.put(matches_map, card_id, matches)}
+      Map.put(matches_map, card_id, matches)
     end)
-    |> populate_copies()
-    |> Enum.count()
+    |> then(fn matches_map ->
+      len = Map.keys(matches_map) |> Enum.count()
+
+      Enum.reduce(Map.keys(matches_map) |> Enum.sort(), List.duplicate(1, len), fn num, occurs ->
+        score = Map.get(matches_map, num)
+        card_count = Enum.at(occurs, num - 1)
+
+        if score < 1 do
+          occurs
+        else
+          num..min(num + score - 1, len)
+          |> Enum.reduce(occurs, fn next_num, new_occurs ->
+            List.update_at(new_occurs, next_num, &(&1 + card_count))
+          end)
+        end
+      end)
+    end)
+    |> Enum.sum()
     |> IO.puts()
-  end
-
-  def populate_copies({[], _}), do: []
-
-  def populate_copies({cards, matches_map}) do
-    {id, cards} = List.pop_at(cards, 0)
-
-    matching_keys =
-      Enum.filter(
-        Map.keys(matches_map),
-        &(id < &1 and &1 <= id + Map.get(matches_map, id))
-      )
-
-    [id] ++
-      populate_copies({matching_keys, matches_map}) ++
-      populate_copies({cards, matches_map})
   end
 end
